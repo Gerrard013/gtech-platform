@@ -23,6 +23,9 @@ def create_app():
     database_url = os.getenv("DATABASE_URL", "sqlite:///gtech.db")
     if database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql://", 1)
+    # requirements.txt installs psycopg2-binary; normalize psycopg3 URLs to that driver.
+    if database_url.startswith("postgresql+psycopg://"):
+        database_url = database_url.replace("postgresql+psycopg://", "postgresql+psycopg2://", 1)
 
     app.config.update(
         SECRET_KEY=os.getenv("SECRET_KEY", "dev-change-me"),
